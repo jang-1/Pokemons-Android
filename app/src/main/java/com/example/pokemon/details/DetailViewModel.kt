@@ -31,8 +31,6 @@ class DetailsViewModel : ViewModel() {
         try {
              withContext(Dispatchers.IO) {
                 val detailsResponse = pokemonService.getPokemonDetailsByName(pokemonName).body()
-                Log.d("2", detailsResponse.toString())
-                Log.d("3", pokemonName)
                 val details = PokemonDetail(
                     height = detailsResponse?.height ?: 1.0,
                     weight = detailsResponse?.weight ?: 1.0,
@@ -42,7 +40,6 @@ class DetailsViewModel : ViewModel() {
                     speed = getStatValue(detailsResponse?.stats, "speed"),
                     frontImage = detailsResponse?.sprites?.frontDefault.orEmpty()
                 )
-                 Log.d("4", details.toString())
                 _pokemonDetail.postValue(UiState(data = details, isLoading = false))
             }
 

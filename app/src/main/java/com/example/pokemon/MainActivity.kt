@@ -101,7 +101,7 @@ fun PokemonCard(name: String, frontImage: String, onClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClick() } // Usuń nadmiarowy clickable
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier

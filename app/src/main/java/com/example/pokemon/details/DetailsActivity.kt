@@ -29,7 +29,6 @@ import com.example.pokemon.R
 import com.example.pokemon.ui.theme.PokemonTheme
 
 class DetailsActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()
     private val viewModel: DetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,9 +56,6 @@ fun DetailsScreen(viewModel: DetailsViewModel, pokemonName: String, modifier: Mo
         viewModel.loadPokemonDetail(pokemonName)
     }
     val pokemonDetail by viewModel.pokemonDetail.observeAsState()
-    Log.d("1", pokemonDetail.toString())
-
-
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -82,7 +78,7 @@ fun DetailsScreen(viewModel: DetailsViewModel, pokemonName: String, modifier: Mo
                 model = pokemonDetail?.data?.frontImage,
                 contentDescription = "To jest obrazek ${pokemonName}",
                 modifier.size(200.dp),
-                placeholder = painterResource(R.drawable.pikachu), // opcjonalnie,
+                placeholder = painterResource(R.drawable.pikachu),
             )
 
 

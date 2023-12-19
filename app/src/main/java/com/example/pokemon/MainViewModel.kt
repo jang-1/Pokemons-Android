@@ -53,8 +53,4 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getPokemonDetailsByName(pokemonName: String): PokemonDetail? {
-        val pokemon = immutablePokemonData.value?.data?.find { it.name == pokemonName }
-        return pokemon?.details
-    }
 }
