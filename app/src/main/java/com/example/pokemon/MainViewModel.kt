@@ -27,6 +27,11 @@ class MainViewModel : ViewModel() {
         return stats?.find { it.stat.name == statName }?.base_stat ?: 0
     }
 
+    val filterQuery = MutableLiveData("")
+    fun updateFilterQuery(text: String){
+        filterQuery.postValue(text)
+    }
+
     fun getData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

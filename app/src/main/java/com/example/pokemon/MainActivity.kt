@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,10 +16,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +40,7 @@ import com.example.pokemon.ui.theme.PokemonTheme
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,10 +49,17 @@ class MainActivity : ComponentActivity() {
         setContent {
             PokemonTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize().background(Color.Black),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PokemonList(viewModel = viewModel, onClick = { name -> navigateToDetails(name) })
+                    Scaffold(topBar = {
+                        MyTopView(viewModel = viewModel)
+                    }){scaffoldPaddings ->
+                        PokemonList(viewModel = viewModel, onClick = { name -> navigateToDetails(name) },modifier = Modifier
+                            .padding(scaffoldPaddings))
+                    }
                 }
             }
         }
@@ -57,11 +72,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun PokemonList(viewModel: MainViewModel, onClick: (String) -> Unit) {
+fun PokemonList(viewModel: MainViewModel, onClick: (String) -> Unit, modifier: Modifier) {
     val uiState by viewModel.immutablePokemonData.observeAsState(UiState())
-
+    val query by viewModel.filterQuery.observeAsState("")
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(80.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -80,13 +95,15 @@ fun PokemonList(viewModel: MainViewModel, onClick: (String) -> Unit) {
                 }
             }
             else -> {
-                uiState?.data?.let { pokemons ->
-                    items(pokemons) { pokemon ->
-                        PokemonCard(
-                            name = pokemon.name,
-                            frontImage = pokemon.details.frontImage,
-                            onClick = { onClick(pokemon.name) }
-                        )
+                uiState?.data?.let { restPokemons ->
+                    restPokemons.filter { it.name.contains(query, true) }.let { pokemons ->
+                        items(pokemons) { pokemon ->
+                            PokemonCard(
+                                name = pokemon.name,
+                                frontImage = pokemon.details.frontImage,
+                                onClick = { onClick(pokemon.name) }
+                            )
+                        }
                     }
                 }
             }
@@ -120,4 +137,35 @@ fun PokemonCard(name: String, frontImage: String, onClick: () -> Unit) {
         Text(text = name, fontWeight = FontWeight.Bold)
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTopView(viewModel: MainViewModel) {
+    var searchText by remember { mutableStateOf("") }
+
+    SearchBar(
+        modifier = Modifier.fillMaxWidth(),
+        query = searchText,
+        onQueryChange = { wpisywanyTekst -> searchText = wpisywanyTekst },
+        onSearch = { viewModel.updateFilterQuery(it) },
+        placeholder = { Text(text = "Wyszukaj...") },
+        active = false,
+        onActiveChange = { },
+        leadingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
+        },
+        trailingIcon = {
+            Image(
+                modifier = Modifier.clickable {
+                    searchText = ""
+                    viewModel.updateFilterQuery("")
+                },
+                imageVector = Icons.Default.Clear,
+                contentDescription = "Clear"
+            )
+        }
+    ) {
+
+    }
+}
+
 
