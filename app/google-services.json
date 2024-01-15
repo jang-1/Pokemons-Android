@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19908712003",
+    "project_id": "pokemons-8f62d",
+    "storage_bucket": "pokemons-8f62d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19908712003:android:5cebcda3ae24784d95a6f6",
+        "android_client_info": {
+          "package_name": "com.example.pokemon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC7ho5H-xWlQXMjg4JfRI1-g8xeWStV9ZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,15 +11,15 @@ import com.example.pokemon.data.PokemonDetail
 import com.example.pokemon.data.PokemonResponse
 import com.example.pokemon.data.PokemonService
 import com.example.pokemon.data.StatResponse
+import com.example.pokemon.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val pokemonRepository: PokemonRepository) : ViewModel() {
 
-    private val pokemonService = PokemonService.retrofit.create(PokemonService::class.java)
 
-    private suspend fun getPokemonResponse(): Response<PokemonResponse> = pokemonService.getPokemonResponse()
+    private suspend fun getPokemonResponse(): Response<PokemonResponse> = pokemonRepository.getPokemonResponse()
     val mutablePokemonData = MutableLiveData<UiState<List<Pokemon>>>()
     val immutablePokemonData: LiveData<UiState<List<Pokemon>>> = mutablePokemonData
 
@@ -37,7 +37,7 @@ class MainViewModel : ViewModel() {
             try {
                 var pokemons = getPokemonResponse().body()?.results
                 pokemons?.forEachIndexed { index, pokemon ->
-                    val detailsResponse = pokemonService.getPokemonDetailsResponse(index + 1).body()
+                    val detailsResponse = pokemonRepository.getPokemonDetailsResponse(index + 1).body()
                     val details = PokemonDetail(
                         height = detailsResponse?.height ?: 1.0,
                         weight = detailsResponse?.weight ?: 1.0,

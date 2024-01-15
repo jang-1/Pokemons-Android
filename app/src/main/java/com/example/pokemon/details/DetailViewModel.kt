@@ -10,13 +10,13 @@ import com.example.pokemon.MainViewModel
 import com.example.pokemon.data.PokemonDetail
 import com.example.pokemon.data.PokemonService
 import com.example.pokemon.data.StatResponse
+import com.example.pokemon.repository.PokemonRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DetailsViewModel : ViewModel() {
+class DetailsViewModel(private val pokemonRepository: PokemonRepository) : ViewModel() {
 
-    private val pokemonService = PokemonService.retrofit.create(PokemonService::class.java)
 
     private val _pokemonDetail = MutableLiveData<UiState<PokemonDetail?>>()
     val pokemonDetail: LiveData<UiState<PokemonDetail?>> get() = _pokemonDetail
@@ -30,7 +30,7 @@ class DetailsViewModel : ViewModel() {
 
         try {
              withContext(Dispatchers.IO) {
-                val detailsResponse = pokemonService.getPokemonDetailsByName(pokemonName).body()
+                val detailsResponse = pokemonRepository.getPokemonDetailsByName(pokemonName).body()
                 val details = PokemonDetail(
                     height = detailsResponse?.height ?: 1.0,
                     weight = detailsResponse?.weight ?: 1.0,

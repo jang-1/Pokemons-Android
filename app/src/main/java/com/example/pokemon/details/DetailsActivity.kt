@@ -27,9 +27,10 @@ import coil.compose.rememberImagePainter
 import com.example.pokemon.MainViewModel
 import com.example.pokemon.R
 import com.example.pokemon.ui.theme.PokemonTheme
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailsActivity : ComponentActivity() {
-    private val viewModel: DetailsViewModel by viewModels()
+    private val viewModel: DetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

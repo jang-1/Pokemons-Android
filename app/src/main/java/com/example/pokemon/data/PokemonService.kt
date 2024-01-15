@@ -26,6 +26,10 @@ interface PokemonService {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
+
+        val pokemonService: PokemonService by lazy {
+            retrofit.create(PokemonService::class.java)
+        }
     }
 
 
