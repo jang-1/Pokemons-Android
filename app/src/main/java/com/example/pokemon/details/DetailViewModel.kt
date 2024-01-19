@@ -27,6 +27,7 @@ class DetailsViewModel(private val pokemonRepository: PokemonRepository) : ViewM
 
     suspend fun loadPokemonDetail(pokemonName: String) {
         _pokemonDetail.value = UiState(isLoading = true)
+//        _pokemonDetail.postValue(UiState( isLoading = true))
 
         try {
              withContext(Dispatchers.IO) {

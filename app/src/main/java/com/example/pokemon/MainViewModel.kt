@@ -35,6 +35,7 @@ class MainViewModel(private val pokemonRepository: PokemonRepository) : ViewMode
     fun getData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                mutablePokemonData.postValue(UiState( isLoading = true))
                 var pokemons = getPokemonResponse().body()?.results
                 pokemons?.forEachIndexed { index, pokemon ->
                     val detailsResponse = pokemonRepository.getPokemonDetailsResponse(index + 1).body()
